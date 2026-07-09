@@ -1,111 +1,179 @@
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>School Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>KALRO | Academic Management Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body {
+            background-color: #121214;
+            color: #e2e8f0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .navbar {
+            background-color: #1a1a1e !important;
+            border-bottom: 1px solid #2d2d34;
+        }
+        .card-custom {
+            background-color: #1a1a1e;
+            border: 1px solid #2d2d34;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .card-custom:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            border-color: #0d6efd;
+        }
+        .modal-content {
+            background-color: #1a1a1e;
+            color: #e2e8f0;
+            border: 1px solid #2d2d34;
+        }
+        .form-control, .form-control:focus {
+            background-color: #2d2d34;
+            border: 1px solid #3f3f46;
+            color: #fff;
+        }
+        .form-control:focus {
+            border-color: #0d6efd;
+            box-shadow: none;
+        }
+    </style>
 </head>
-<body class="bg-dark text-light">
+<body>
 
-<div class="container mt-5">
-    <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3 border-secondary">
-        <h2>🎓 Active Students</h2>
-        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addStudentModal">
-            + Enroll Student
-        </button>
-    </div>
-    
-    <div class="row" id="student-list">
-        <p class="text-muted">Loading students from Django API...</p>
-    </div>
-</div>
-
-<div class="modal fade" id="addStudentModal" tabindex="-1">
-  <div class="modal-dialog">
-    <div class="modal-content bg-dark border-secondary">
-      <div class="modal-header border-secondary">
-        <h5 class="modal-title">Enroll New Student</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body">
-        <form id="addStudentForm">
-            <div class="mb-3">
-                <label class="form-label">Full Name</label>
-                <input type="text" class="form-control bg-secondary text-white border-0" id="studentName" required>
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top px-3">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold text-primary" href="#">
+                <i class="fa-solid fa-graduation-cap me-2"></i>KALRO Portal
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#"><i class="fa-solid fa-chart-pie me-1"></i> Dashboard</a>
+                    </li>
+                </ul>
+                <button class="btn btn-primary btn-sm px-3" data-bs-toggle="modal" data-bs-target="#addStudentModal">
+                    <i class="fa-solid fa-user-plus me-2"></i>Enroll New Student
+                </button>
             </div>
-            <div class="mb-3">
-                <label class="form-label">Age</label>
-                <input type="number" class="form-control bg-secondary text-white border-0" id="studentAge" required>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <div class="row mb-4">
+            <div class="col">
+                <h2 class="fw-bold m-0 text-white">Active Student Registry</h2>
+                <p class="text-muted small">Live cloud synchronized data from your Django API gateway.</p>
             </div>
-            <button type="submit" class="btn btn-primary w-100 mt-2">Save to Database</button>
-        </form>
-      </div>
+        </div>
+
+        <div class="row" id="student-list">
+            </div>
     </div>
-  </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <div class="modal fade" id="addStudentModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content shadow-lg">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold"><i class="fa-solid fa-user-plus text-primary me-2"></i>Student Enrollment</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="addStudentForm">
+                    <div class="modal-body py-4">
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">FULL NAME</label>
+                            <input type="text" class="form-control" id="studentName" placeholder="e.g. Alvin Muiru" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">AGE</label>
+                            <input type="number" class="form-control" id="studentAge" placeholder="e.g. 23" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0 pt-0">
+                        <button type="button" class="btn btn-sm btn-secondary px-3" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-sm btn-primary px-4">Save Database Record</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
-<script>
-   const API_URL = 'https://school-management-backend-ddk4.onrender.com/api/students/';
-    // 1. Fetch and Draw Students (GET Request)
-    function loadStudents() {
-        fetch(API_URL)
-            .then(response => response.json())
-            .then(data => {
-                const studentBox = document.getElementById('student-list');
-                studentBox.innerHTML = ''; 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+       const API_URL = 'https://school-management-backend-ddk4.onrender.com/api/students/';
+        
+        // 1. Fetch and Draw Students (GET Request)
+        function loadStudents() {
+            fetch(API_URL)
+                .then(response => response.json())
+                .then(data => {
+                    const studentBox = document.getElementById('student-list');
+                    studentBox.innerHTML = ''; 
 
-                data.forEach(student => {
-                    const card = `
-                        <div class="col-md-4 mb-3">
-                            <div class="card h-100 bg-secondary text-white border-0 shadow-sm">
-                                <div class="card-body">
-                                    <h5 class="card-title fw-bold">${student.name}</h5>
-                                    <p class="card-text mb-2">Age: ${student.age}</p>
-                                    <span class="badge bg-info text-dark">Database ID: #${student.id}</span>
+                    data.forEach(student => {
+                        const card = `
+                            <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
+                                <div class="card card-custom h-100 shadow-sm">
+                                    <div class="card-body d-flex flex-column justify-content-between p-4">
+                                        <div>
+                                            <div class="d-flex align-items-center mb-3">
+                                                <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                                    <i class="fa-solid fa-user text-white"></i>
+                                                </div>
+                                                <h5 class="card-title fw-bold m-0 text-white">${student.name}</h5>
+                                            </div>
+                                            <p class="card-text text-muted mb-3"><i class="fa-solid fa-calendar-days me-2 text-primary"></i>Age: <strong class="text-white">${student.age}</strong></p>
+                                        </div>
+                                        <div class="pt-2 border-top border-secondary border-opacity-50 d-flex justify-content-between align-items-center">
+                                            <span class="badge bg-dark text-muted border border-secondary border-opacity-50 px-2 py-1">Database ID: #${student.id}</span>
+                                            <span class="small text-success"><i class="fa-solid fa-circle-check me-1"></i>Active</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    `;
-                    studentBox.innerHTML += card;
+                        `;
+                        studentBox.innerHTML += card;
+                    });
                 });
+        }
+
+        // 2. Add New Student (POST Request)
+        document.getElementById('addStudentForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // Stop the page from reloading
+            
+            // Grab values from the form inputs
+            const newStudent = {
+                name: document.getElementById('studentName').value,
+                age: document.getElementById('studentAge').value,
+                subjects: [1] 
+            };
+
+            // Send data to Django API
+            fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newStudent)
+            })
+            .then(response => {
+                if(response.ok) {
+                    // Hide popup, clear form, and reload the updated student list
+                    bootstrap.Modal.getInstance(document.getElementById('addStudentModal')).hide();
+                    document.getElementById('addStudentForm').reset();
+                    loadStudents();
+                } else {
+                    alert("Failed to save student.");
+                }
             });
-    }
-
-    // 2. Add New Student (POST Request)
-    document.getElementById('addStudentForm').addEventListener('submit', function(e) {
-        e.preventDefault(); // Stop the page from reloading
-        
-        // Grab values from the form inputs
-        const newStudent = {
-            name: document.getElementById('studentName').value,
-            age: document.getElementById('studentAge').value,
-            subjects: [1] 
-        };
-
-        // Send data to Django API
-        fetch(API_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(newStudent)
-        })
-        .then(response => {
-            if(response.ok) {
-                // Hide popup, clear form, and reload the updated student list
-                bootstrap.Modal.getInstance(document.getElementById('addStudentModal')).hide();
-                document.getElementById('addStudentForm').reset();
-                loadStudents();
-            } else {
-                alert("Failed to save student.");
-            }
         });
-    });
 
-    // Run when page loads
-    loadStudents();
-</script>
-
+        // Run when page loads
+        loadStudents();
+    </script>
 </body>
 </html>
